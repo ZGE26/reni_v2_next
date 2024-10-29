@@ -1,8 +1,8 @@
 export default function Navbar() {
     return (
         <div className="bg-black drop-shadow-lg pr-5 pl-5 pt-3 pb-3 flex justify-between items-center fixed top-0 left-0 right-0 z-50">
-            <div className="flex flex-row gap-5 items-center">
-                <img src="#" alt="logo" className='p-2 w-auto' />
+            <div className="flex flex-row gap-2 items-center">
+                <img src="/Logo.png" alt="logo" className='p-2 h-12' />
                 <a href="/" className="text-white font-bold text-xl">Rekap Tani</a>
             </div>
             <div className="flex gap-8 items-center">
