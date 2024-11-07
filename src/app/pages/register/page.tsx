@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Register() {
     return (
-        <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-blue-400 to-purple-500 p-5">
+        <div className="flex min-h-screen items-center justify-center bg-gradient-to-r from-green-400 to-green-500 p-5">
             <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-md">
                 <h2 className="text-2xl font-semibold text-gray-800 mb-6">Registration</h2>
 
@@ -14,7 +14,7 @@ export default function Register() {
                                 type="text"
                                 placeholder="Enter your name"
                                 required
-                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-purple-500 focus:outline-none"
+                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-green-500 focus:outline-none"
                             />
                         </div>
 
@@ -24,7 +24,7 @@ export default function Register() {
                                 type="text"
                                 placeholder="Enter your username"
                                 required
-                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-purple-500 focus:outline-none"
+                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-green-500 focus:outline-none"
                             />
                         </div>
 
@@ -34,7 +34,7 @@ export default function Register() {
                                 type="email"
                                 placeholder="Enter your email"
                                 required
-                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-purple-500 focus:outline-none"
+                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-green-500 focus:outline-none"
                             />
                         </div>
 
@@ -44,7 +44,7 @@ export default function Register() {
                                 type="tel"
                                 placeholder="Enter your number"
                                 required
-                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-purple-500 focus:outline-none"
+                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-green-500 focus:outline-none"
                             />
                         </div>
 
@@ -54,7 +54,7 @@ export default function Register() {
                                 type="password"
                                 placeholder="Enter your password"
                                 required
-                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-purple-500 focus:outline-none"
+                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-green-500 focus:outline-none"
                             />
                         </div>
 
@@ -64,14 +64,14 @@ export default function Register() {
                                 type="password"
                                 placeholder="Confirm your password"
                                 required
-                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-purple-500 focus:outline-none"
+                                className="mt-1 w-full rounded-md border border-gray-300 p-2 focus:border-green-500 focus:outline-none"
                             />
                         </div>
                     </div>
 
                     <button
                         type="submit"
-                        className="mt-6 w-full bg-gradient-to-r from-blue-400 to-purple-500 text-white py-2 rounded-md text-lg font-medium hover:bg-gradient-to-l transition duration-300"
+                        className="mt-6 w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-2 rounded-md text-lg font-medium hover:bg-gradient-to-l transition duration-300"
                     >
                         Register
                     </button>

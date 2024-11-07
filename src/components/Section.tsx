@@ -18,7 +18,7 @@ export default function Section() {
                 <h1 className="text-3xl md:text-5xl font-bold mb-4">Solusi Digital untuk <br />Pertanian yang Lebih Cerdas</h1>
 
                 {/* Teks deskripsi dengan line-clamp untuk mobile */}
-                <p className="text-lg mb-6 line-clamp-3 md:line-clamp-none">
+                <p className="text-lg mb-6 line-clamp-3 md:line-clamp-3">
                     Rekap Tani adalah platform inovatif yang menggunakan teknologi modern untuk membantu petani mencatat
                     dan mengelola hasil pertanian dengan lebih efisien, memungkinkan pencatatan hasil panen, analisis tren
                     produksi, rekomendasi tanaman yang tepat, serta berbagi informasi dengan petani lain guna menciptakan
