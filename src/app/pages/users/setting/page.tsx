@@ -1,16 +1,11 @@
+import Navbar from "@/components_dashboard/Navbar";
+
 export default function Setting() {
     return (
         <div className="w-full h-screen">
+            <Navbar />
             <div className="m-5">
-                <div className="mb-3">
-                    <a href="/pages/users/dashboard"
-                        type="submit"
-                        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold p-3 rounded-md focus:ring-blue-500"
-                    >
-                        Kembali
-                    </a>
-                </div>
-                <h2 className="text-2xl font-semibold text-gray-800 mb-6">Pengaturan</h2>
+                <h2 className="text-2xl font-semibold text-gray-800 mb-6 text-center">Pengaturan</h2>
                 <form>
                     <div>
                         <div className="mb-4 flex items-center gap-3 border rounded-md p-2 justify-center flex-col">

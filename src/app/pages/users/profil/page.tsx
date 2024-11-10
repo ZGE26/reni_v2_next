@@ -1,4 +1,4 @@
-import Head from "@/components_dashboard/Head";
+import Navbar from "@/components_dashboard/Navbar";
 
 const photoLahan = ["Testing.jpeg", "Tanaman.jpg", "Logo.png"];
 
@@ -6,7 +6,7 @@ const photoLahan = ["Testing.jpeg", "Tanaman.jpg", "Logo.png"];
 export default function Profil() {
     return (
         <div>
-            <Head page_name="Profil" />
+            <Navbar />
             <div className="flex h-screen gap-5 flex-col md:flex-row m-2">
                 <div className="flex-1 flex flex-col shadow-md rounded-lg justify-center items-center p-10">
 

@@ -1,9 +1,9 @@
-import Head from "@/components_dashboard/Head";
+import Navbar from "@/components_dashboard/Navbar";
 
 export default function DataPetani() {
     return (
         <div>
-            <Head page_name="Data Petani"/>
+            <Navbar />
             <h1>Data Petani</h1>
         </div>
     );

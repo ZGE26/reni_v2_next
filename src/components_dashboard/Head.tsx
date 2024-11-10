@@ -4,7 +4,7 @@ interface HeadProps {
 
 export default function Head({page_name}: HeadProps) {
     return (
-        <div className="flex justify-between shadow-md p-2 items-center">
+        <div className="flex justify-between shadow-md p-2 items-center bg-white">
             <div className="ml-3">
                 <a href="/pages/users/dashboard" className="p-2 bg-blue-600 text-white rounded-md hover:bg-blue-800">Kembali</a>
             </div>
