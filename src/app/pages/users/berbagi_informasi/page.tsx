@@ -1,58 +1,40 @@
-"use client";
-
-import { useState } from 'react';
 import Head from '@/components_dashboard/Head';
 import Breadcrumb from '@/components/Breadcrumbs';
-import CardTanaman from '@/components/CardTanaman';
 import { pertanianData } from '../../data/DataBayangan';
 
-export default function Rekomendasi() {
-    const [kondisiTanah, setKondisiTanah] = useState('');
-
-    // Filter tanaman berdasarkan kondisi tanah yang dipilih
-    const filteredTanaman = kondisiTanah
-        ? pertanianData.tanaman.filter((tanaman) => tanaman.kondisiTanah === kondisiTanah)
-        : pertanianData.tanaman;
-
+export default function BerbagiInformasi() {
     return (
-        <div>
-            <Head page_name="Rekomendasi" />
-            <div className="px-4 mt-3">
+        <div className='p-3'>
+            <Head page_name="Berbagi Informasi" />
+            <div className="p-4">
                 <Breadcrumb listpage={[
                     { name: "Dashboard", link: "/pages/users/dashboard" },
-                    { name: "Rekomendasi", link: "/pages/users/rekomendasi" },
+                    { name: "Berbagi Informasi", link: "/pages/users/berbagi_informasi" },
                 ]} />
             </div>
-            <div className="flex p-4 w-full flex-col gap-4">
-                {/* Filter Berdasarkan Kondisi Tanah */}
-                <div className="flex-1 w-full md:w-1/3 border p-4">
-                    <label htmlFor="kondisiTanah" className="block font-semibold mb-2">Filter Berdasarkan Kondisi Tanah</label>
-                    <select
-                        id="kondisiTanah"
-                        value={kondisiTanah}
-                        onChange={(e) => setKondisiTanah(e.target.value)}
-                        className="w-full p-2 border rounded-md"
-                    >
-                        <option value="">Semua Kondisi</option>
-                        <option value="kering">Kering</option>
-                        <option value="lembab">Lembab</option>
-                        <option value="basah">Basah</option>
-                    </select>
-                </div>
-
-                {/* Daftar Tanaman dengan Scroll Horizontal pada Mobile */}
-                <div>
-                    {filteredTanaman.map((tanaman, index) => (
-                        <div key={index}>
-                            <CardTanaman
-                                nama={tanaman.nama}
-                                gambar={tanaman.gambar}
-                                deskripsi={tanaman.deskripsi}
-                            />
+            {pertanianData.post.map((post, index) => (
+                <div key={index} className="p-4 border rounded-md shadow-md mb-4">
+                    <div className='w-full flex gap-5 items-center p-2 border-b border-black'>
+                        <div>
+                            <div className='h-8 w-8 border rounded-full'>
+                                <img src="#" alt="Profil" />
+                            </div>
+                            <div className='font-bold text-xl'>
+                                <p>{post.nama}</p>
+                            </div>
                         </div>
-                    ))}
+                        <div>
+                            <p>{post.tanggal}</p>
+                        </div>
+                    </div>
+                    <div className='p-3 font-bold text-2xl'>
+                        <h1>{post.title}</h1>
+                    </div>
+                    <div className='px-5 border-b border-black pb-3'>
+                        <p>{post.content}</p>
+                    </div>
                 </div>
-            </div>
+            ))}
         </div>
     );
-};
+}
