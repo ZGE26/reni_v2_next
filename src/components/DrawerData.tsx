@@ -1,22 +1,28 @@
-// components/Drawer.js
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 interface DrawerProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
+const dataLahan = [
+    { id: 1, namaLahan: "Lahan 1" },
+    { id: 2, namaLahan: "Lahan 2" },
+    { id: 3, namaLahan: "Lahan 3" },
+];
+
 const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
     const [formData, setFormData] = useState({
-        tanggal: '',
-        jenisTanaman: '',
-        luasLahan: '',
-        totalPanen: '',
+        tanggal: "",
+        jenisTanaman: "",
+        namaLahan: "",
+        luasLahan: "",
+        totalPanen: "",
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         setFormData({
             ...formData,
@@ -26,14 +32,15 @@ const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log('Data yang dikirim:', formData);
+        console.log("Data yang dikirim:", formData);
         onClose();
     };
 
     return (
         <div
-            className={`fixed inset-0 z-50 bg-gray-900 bg-opacity-50 flex justify-end ${isOpen ? 'block' : 'hidden'
-                }`}
+            className={`fixed inset-0 z-50 bg-gray-900 bg-opacity-50 flex justify-end ${
+                isOpen ? "block" : "hidden"
+            }`}
         >
             <div className="bg-white w-96 p-6 shadow-xl transform transition-transform duration-300 ease-in-out">
                 <h2 className="text-xl font-semibold mb-4">Input Data Panen</h2>
@@ -48,6 +55,23 @@ const Drawer: React.FC<DrawerProps> = ({ isOpen, onClose }) => {
                             className="w-full px-3 py-2 border border-gray-300 rounded"
                             required
                         />
+                    </div>
+                    <div className="mb-4">
+                        <label className="block text-gray-700">Nama Lahan</label>
+                        <select
+                            name="namaLahan"
+                            value={formData.namaLahan}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded"
+                            required
+                        >
+                            <option value="">Pilih Lahan</option>
+                            {dataLahan.map((item) => (
+                                <option key={item.id} value={item.namaLahan}>
+                                    {item.namaLahan}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700">Jenis Tanaman</label>

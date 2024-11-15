@@ -14,16 +14,16 @@ export default function BerbagiInformasi() {
             </div>
             {pertanianData.post.map((post, index) => (
                 <div key={index} className="p-4 border rounded-md shadow-md mb-4">
-                    <div className='w-full flex gap-5 items-center p-2 border-b border-black'>
-                        <div>
+                    <div className='w-full flex gap-5 items-center p-2 border-b border-black justify-between'>
+                        <div className='flex gap-3 justify-center items-center'>
                             <div className='h-8 w-8 border rounded-full'>
-                                <img src="#" alt="Profil" />
+                                <img src="#" alt="P" className='text-center'/>
                             </div>
                             <div className='font-bold text-xl'>
                                 <p>{post.nama}</p>
                             </div>
                         </div>
-                        <div>
+                        <div className='text-xs'>
                             <p>{post.tanggal}</p>
                         </div>
                     </div>

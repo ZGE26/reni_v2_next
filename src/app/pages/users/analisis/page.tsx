@@ -37,12 +37,7 @@ export default function Analisis() {
                         <DataTable data={dataPertanian} />
                     </div>
                     <div className="flex-2">
-                        <AnalysisSummary
-                            totalLuasLahan={dataPertanian.reduce((total, item) => total + item.luasLahan, 0)}
-                            totalHasilPanen={dataPertanian.reduce((total, item) => total + item.hasilPanen, 0)}
-                            rataHasilPerHektar={dataPertanian.reduce((total, item) => total + item.hasilPanen, 0) /
-                                dataPertanian.reduce((total, item) => total + item.luasLahan, 0)}
-                        />
+                        <AnalysisSummary/>
                     </div>
                 </div>
             </div>
