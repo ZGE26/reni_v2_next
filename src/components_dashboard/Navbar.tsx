@@ -7,8 +7,12 @@ export default function Navbar() {
 
     const toggleMenu = () => {
         setIsOpen(!isOpen); // Mengubah status menu ketika tombol ditekan
-    };
-
+    }; 
+    const logout = () => {
+        if (localStorage.getItem("token") != null) {
+            localStorage.removeItem('token');
+        }
+    }
     return (
         <nav className="bg-white border-gray-200 p-1 border shadow-sm">
             <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
@@ -50,6 +54,10 @@ export default function Navbar() {
                         </li>
                         <li>
                             <a href="/pages/users/setting" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Pengaturan</a>
+                        </li>
+                        <li>
+                            <a onClick={logout} href="/pages/login" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Logout</a>
+                            
                         </li>
                     </ul>
                 </div>

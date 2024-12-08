@@ -1,3 +1,5 @@
+"use client";
+
 import Navbar from "@/components_dashboard/Navbar";
 import Footer from "@/components/Footer";
 import ChartDonut from "@/components_dashboard/ChartDonut";
@@ -8,6 +10,9 @@ import { pertanianData, getRandomColor } from '@/app/pages/data/DataBayangan';
 export default function Dashboard() {
     // Buat warna acak untuk setiap item di petaniData
     const colors = pertanianData.petaniData.map(() => getRandomColor());
+    if(localStorage.getItem("token") === null) {
+        window.location.href = "/pages/login"
+    }
 
     return (
         <div>

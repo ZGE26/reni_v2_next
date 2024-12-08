@@ -1,9 +1,15 @@
+"use client";
 import Navbar from "@/components_dashboard/Navbar";
 
 const photoLahan = ["Testing.jpeg", "Tanaman.jpg", "Logo.png"];
 
 
 export default function Profil() {
+
+    if(localStorage.getItem("token") === null) {
+        window.location.href = "/pages/login"
+    }
+
     return (
         <div>
             <Navbar />

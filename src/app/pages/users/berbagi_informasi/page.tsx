@@ -1,8 +1,14 @@
+"use client";
 import Head from '@/components_dashboard/Head';
 import Breadcrumb from '@/components/Breadcrumbs';
 import { pertanianData } from '../../data/DataBayangan';
 
 export default function BerbagiInformasi() {
+
+    if(localStorage.getItem("token") === null) {
+        window.location.href = "/pages/login"
+    }
+
     return (
         <div className='p-3'>
             <Head page_name="Berbagi Informasi" />

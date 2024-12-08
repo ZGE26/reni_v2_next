@@ -1,6 +1,12 @@
+"use client";
 import Navbar from "@/components_dashboard/Navbar";
 
 export default function Setting() {
+
+    if(localStorage.getItem("token") === null) {
+        window.location.href = "/pages/login"
+    }
+    
     return (
         <div className="w-full h-screen">
             <Navbar />

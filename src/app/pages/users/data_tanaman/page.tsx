@@ -1,9 +1,15 @@
 // pages/data-tanaman.js
+"use client";
 import React from 'react';
 import Head from '@/components_dashboard/Head';
 import Breadcrumb from '@/components/Breadcrumbs';
 
 export default function DataTanaman(){
+
+    if(localStorage.getItem("token") === null) {
+        window.location.href = "/pages/login"
+    }
+
     return (
         <div>
             <Head page_name="Data Tanaman" />

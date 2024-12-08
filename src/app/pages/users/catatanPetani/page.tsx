@@ -8,6 +8,11 @@ import Drawer from "@/components/DrawerData";
 
 export default function Pencatatan() {
     const [isDrawerOpen, setDrawerOpen] = React.useState(false);
+
+    if(localStorage.getItem("token") === null) {
+        window.location.href = "/pages/login"
+    }
+
     return (
         <div>
             <Head page_name="Pencatatan" />

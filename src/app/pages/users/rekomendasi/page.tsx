@@ -14,6 +14,11 @@ export default function Rekomendasi() {
         ? pertanianData.tanaman.filter((tanaman) => tanaman.kondisiTanah === kondisiTanah)
         : pertanianData.tanaman;
 
+
+        if(localStorage.getItem("token") === null) {
+            window.location.href = "/pages/login"
+        }    
+
     return (
         <div>
             <Head page_name="Rekomendasi" />

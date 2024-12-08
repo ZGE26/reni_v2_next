@@ -1,3 +1,4 @@
+"use client";
 import Head from '@/components_dashboard/Head';
 import Breadcrumb from '@/components/Breadcrumbs';
 import DataTable from '@/components_dashboard/DataTable';
@@ -13,6 +14,10 @@ export default function Analisis() {
     const series = petaniData.map((data) => (data.jumlah / totalPetani) * 100);
     const labels = petaniData.map((data) => data.tanaman);
     const colors = petaniData.map(() => getRandomColor());
+
+    if(localStorage.getItem("token") === null) {
+        window.location.href = "/pages/login"
+    }
 
     return (
         <div>

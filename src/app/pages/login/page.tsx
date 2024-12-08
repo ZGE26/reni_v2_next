@@ -23,7 +23,7 @@ export default function Login() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Kirim data ke API untuk registrasi
+        // Kirim data ke API untuk login
         try {
             const response = await fetch("http://localhost:8000/login", {
                 method: "POST",
@@ -47,8 +47,8 @@ export default function Login() {
                 alert(`Error: ${result.message}`);
             }
         } catch (error) {
-            console.error("Error during registration:", error);
-            alert("Terjadi kesalahan saat registrasi.");
+            console.error("Error during login:", error);
+            alert("Terjadi kesalahan saat login.");
         }
     };
 
@@ -59,7 +59,7 @@ export default function Login() {
                 <h2 className="text-2xl font-semibold text-gray-800 text-center mb-6">Login</h2>
 
                 <form onSubmit={handleSubmit}>
-                    {/* Username */}
+                    {/* NO KTP */}
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-medium mb-2">No KTP</label>
                         <input
@@ -101,7 +101,7 @@ export default function Login() {
                 {/* Link to Register Page */}
                 <div className="text-center mt-4">
                     <p className="text-gray-600">
-                        Don't have an account?{' '}
+                        Don&apos;t have an account?{' '}
                         <Link href="/pages/register" className="text-green-500 hover:underline">
                             Register here
                         </Link>
