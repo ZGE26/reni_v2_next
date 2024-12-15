@@ -35,12 +35,26 @@ export default function Login() {
 
             const result = await response.json();
 
+            console.log(result);
+
             if (response.ok) {
                 // Menampilkan pesan sukses
                 console.log(result.token)
                 localStorage.setItem('token', result.token);
-                alert("Login berhasil!");
-                window.location.href = "/pages/users/dashboard";
+                console.log(result);
+                if(result.role == 1) {
+                    window.location.href = "/pages/admin/dashboard";
+                    localStorage.setItem('role_id', result.role)
+                    alert("Welcom Admin!");
+                }else if ( result.role == 2) {
+                    window.location.href = "/pages/users/dashboard";
+                    alert("Login berhasil!");
+                }else {
+                    alert("Role Tidak Ditemukan")
+                }
+                
+
+                
             } else {
                 // Menampilkan pesan error
                 console.log(response)
