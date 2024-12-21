@@ -1,47 +1,137 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Dashboard() {
     if (localStorage.getItem("token") === null) {
         window.location.href = "/pages/login";
     }
-
     if (localStorage.getItem("role_id") !== "1") {
         window.location.href = "/pages/users/dashboard";
     }
 
     // State untuk form wilayah
-    const [wilayahData, setWilayahData] = useState({
-        name: "",
-    });
+    const [wilayahData, setWilayahData] = useState<any[]>([]);
+    const [currentWilayah, setCurrentWilayah] = useState<any>(null);
+    const [isEditingWilayah, setIsEditingWilayah] = useState(false);
+    const [newWilayahName, setNewWilayahName] = useState("");
 
     // State untuk form pangan
-    const [panganData, setPanganData] = useState({
-        name: "",
-    });
+    const [panganData, setPanganData] = useState<any[]>([]);
+    const [currentPangan, setCurrentPangan] = useState<any>(null);
+    const [isEditingPangan, setIsEditingPangan] = useState(false);
+    const [newPanganName, setNewPanganName] = useState("");
 
-    // Fungsi untuk menangani perubahan input form wilayah
-    const handleWilayahChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setWilayahData({
-            ...wilayahData,
-            [name]: value,
-        });
+    // State untuk error
+    const [error, setError] = useState<string>("");
+
+    // Fetch data function
+    const fetchData = async (endpoint: string, setData: any) => {
+        try {
+            const response = await fetch(`http://localhost:8000/${endpoint}`, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setData(data.data || []);
+            } else {
+                setError(`Gagal mengambil data ${endpoint}`);
+            }
+        } catch (err) {
+            setError(`Terjadi kesalahan saat mengambil data ${endpoint}`);
+        }
     };
 
-    // Fungsi untuk menangani perubahan input form pangan
-    const handlePanganChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setPanganData({
-            ...panganData,
-            [name]: value,
-        });
+    // Handle delete
+    const handleDelete = async (endpoint: string, id: number, setData: any) => {
+        try {
+            const response = await fetch(`http://localhost:8000/${endpoint}/${id}`, {
+                method: "DELETE",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            });
+
+            if (response.ok) {
+                alert("Data berhasil dihapus!");
+                fetchData(endpoint, setData);
+            } else {
+                console.error("Gagal menghapus data");
+            }
+        } catch (error) {
+            console.error("Terjadi kesalahan saat menghapus data");
+        }
     };
 
-    // Fungsi untuk menangani pengiriman form wilayah
-    const handleWilayahSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    // Handle edit
+    const handleEdit = (data: any, endpoint: string) => {
+        if (endpoint === "wilayah") {
+            setCurrentWilayah(data);
+            setIsEditingWilayah(true);
+            setNewWilayahName(data.name);
+        } else if (endpoint === "pangan") {
+            setCurrentPangan(data);
+            setIsEditingPangan(true);
+            setNewPanganName(data.name);
+        }
+    };
 
+    // Handle save edited wilayah
+    const handleSaveEditWilayah = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/wilayah/${currentWilayah.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+                body: JSON.stringify({
+                    name: newWilayahName,
+                }),
+            });
+
+            if (response.ok) {
+                alert("Data berhasil diperbarui!");
+                setIsEditingWilayah(false);
+                fetchData("wilayah", setWilayahData);
+            } else {
+                console.error("Gagal memperbarui data wilayah");
+            }
+        } catch (error) {
+            console.error("Terjadi kesalahan saat menyimpan data wilayah");
+        }
+    };
+
+    // Handle save edited pangan
+    const handleSaveEditPangan = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/pangan/${currentPangan.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+                body: JSON.stringify({
+                    name: newPanganName,
+                }),
+            });
+
+            if (response.ok) {
+                alert("Data berhasil diperbarui!");
+                setIsEditingPangan(false);
+                fetchData("pangan", setPanganData);
+            } else {
+                console.error("Gagal memperbarui data pangan");
+            }
+        } catch (error) {
+            console.error("Terjadi kesalahan saat menyimpan data pangan");
+        }
+    };
+
+    // Handle create new wilayah
+    const handleCreateWilayah = async () => {
         try {
             const response = await fetch("http://localhost:8000/wilayah", {
                 method: "POST",
@@ -49,30 +139,25 @@ export default function Dashboard() {
                     "Content-Type": "application/json",
                     Authorization: "Bearer " + localStorage.getItem("token"),
                 },
-                body: JSON.stringify(wilayahData),
+                body: JSON.stringify({
+                    name: newWilayahName,
+                }),
             });
 
-            const result = await response.json();
-
-            console.log(result);
-
             if (response.ok) {
-                alert("Input Wilayah Berhasil");
-                window.location.reload();
+                alert("Data wilayah berhasil ditambahkan!");
+                setNewWilayahName(""); // Reset input
+                fetchData("wilayah", setWilayahData);
             } else {
-                console.log(response);
-                alert(`Error: ${result.message}`);
+                console.error("Gagal menambahkan data wilayah");
             }
         } catch (error) {
-            console.error("Error during input:", error);
-            alert("Terjadi kesalahan saat input wilayah.");
+            console.error("Terjadi kesalahan saat menambahkan data wilayah");
         }
     };
 
-    // Fungsi untuk menangani pengiriman form pangan
-    const handlePanganSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-
+    // Handle create new pangan
+    const handleCreatePangan = async () => {
         try {
             const response = await fetch("http://localhost:8000/pangan", {
                 method: "POST",
@@ -80,82 +165,173 @@ export default function Dashboard() {
                     "Content-Type": "application/json",
                     Authorization: "Bearer " + localStorage.getItem("token"),
                 },
-                body: JSON.stringify(panganData),
+                body: JSON.stringify({
+                    name: newPanganName,
+                }),
             });
 
-            const result = await response.json();
-
-            console.log(result);
-
             if (response.ok) {
-                alert("Input Pangan Berhasil");
-                window.location.reload();
+                alert("Data pangan berhasil ditambahkan!");
+                setNewPanganName(""); // Reset input
+                fetchData("pangan", setPanganData);
             } else {
-                console.log(response);
-                alert(`Error: ${result.message}`);
+                console.error("Gagal menambahkan data pangan");
             }
         } catch (error) {
-            console.error("Error during input:", error);
-            alert("Terjadi kesalahan saat input pangan.");
+            console.error("Terjadi kesalahan saat menambahkan data pangan");
         }
     };
 
+    // Fetch data for wilayah and pangan on component mount
+    useEffect(() => {
+        fetchData("wilayah", setWilayahData);
+        fetchData("pangan", setPanganData);
+    }, []);
+
     return (
         <div>
-            {/* Form Wilayah */}
-            <form onSubmit={handleWilayahSubmit}>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-medium mb-2">
-                        Nama Wilayah
-                    </label>
-                    <input
-                        type="text"
-                        name="name"
-                        id="input_name"
-                        value={wilayahData.name}
-                        placeholder="Masukkan Nama Wilayah"
-                        onChange={handleWilayahChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required
-                    />
-                </div>
-                <div className="mt-6">
-                    <button
-                        type="submit"
-                        className="w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-2 rounded-md font-semibold hover:bg-gradient-to-l"
-                    >
-                        Submit
-                    </button>
-                </div>
-            </form>
+            {/* Error Display */}
+            {error && <p className="text-red-500">{error}</p>}
 
-            {/* Form Pangan */}
-            <form onSubmit={handlePanganSubmit}>
-                <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-medium mb-2">
-                        Nama Pangan
-                    </label>
-                    <input
-                        type="text"
-                        name="name"
-                        id="input_name"
-                        value={panganData.name}
-                        placeholder="Masukkan Nama Pangan"
-                        onChange={handlePanganChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                        required
-                    />
+            {/* Input Form for Wilayah */}
+            <div className="mt-4">
+                <h3>Tambah Wilayah</h3>
+                <input
+                    type="text"
+                    value={newWilayahName}
+                    onChange={(e) => setNewWilayahName(e.target.value)}
+                    placeholder="Nama Wilayah"
+                    className="p-2 border"
+                />
+                <button onClick={handleCreateWilayah} className="ml-2 bg-green-500 text-white px-4 py-2 rounded">
+                    Tambah Wilayah
+                </button>
+            </div>
+
+            {/* Input Form for Pangan */}
+            <div className="mt-4">
+                <h3>Tambah Pangan</h3>
+                <input
+                    type="text"
+                    value={newPanganName}
+                    onChange={(e) => setNewPanganName(e.target.value)}
+                    placeholder="Nama Pangan"
+                    className="p-2 border"
+                />
+                <button onClick={handleCreatePangan} className="ml-2 bg-green-500 text-white px-4 py-2 rounded">
+                    Tambah Pangan
+                </button>
+            </div>
+
+            {/* Render Wilayah Table */}
+            <div className="mt-8">
+                <h2>Wilayah</h2>
+                <table className="min-w-full">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nama Wilayah</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {wilayahData.map((item: any) => (
+                            <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td>{item.name}</td>
+                                <td>
+                                    <button onClick={() => handleEdit(item, "wilayah")}>Edit</button>
+                                    <button onClick={() => handleDelete("wilayah", item.id, setWilayahData)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Render Pangan Table */}
+            <div className="mt-8">
+                <h2>Pangan</h2>
+                <table className="min-w-full">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nama Pangan</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {panganData.map((item: any) => (
+                            <tr key={item.id}>
+                                <td>{item.id}</td>
+                                <td>{item.name}</td>
+                                <td>
+                                    <button onClick={() => handleEdit(item, "pangan")}>Edit</button>
+                                    <button onClick={() => handleDelete("pangan", item.id, setPanganData)}>Delete</button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Modal for Editing Wilayah */}
+            {isEditingWilayah && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+                    <div className="bg-white p-6 rounded shadow-lg">
+                        <h2>Edit Wilayah</h2>
+                        <input
+                            type="text"
+                            value={newWilayahName}
+                            onChange={(e) => setNewWilayahName(e.target.value)}
+                            className="p-2 border"
+                        />
+                        <div className="mt-4">
+                            <button
+                                onClick={handleSaveEditWilayah}
+                                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                            >
+                                Save
+                            </button>
+                            <button
+                                onClick={() => setIsEditingWilayah(false)}
+                                className="bg-gray-500 text-white px-4 py-2 rounded"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div className="mt-6">
-                    <button
-                        type="submit"
-                        className="w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-2 rounded-md font-semibold hover:bg-gradient-to-l"
-                    >
-                        Submit
-                    </button>
+            )}
+
+            {/* Modal for Editing Pangan */}
+            {isEditingPangan && (
+                <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
+                    <div className="bg-white p-6 rounded shadow-lg">
+                        <h2>Edit Pangan</h2>
+                        <input
+                            type="text"
+                            value={newPanganName}
+                            onChange={(e) => setNewPanganName(e.target.value)}
+                            className="p-2 border"
+                        />
+                        <div className="mt-4">
+                            <button
+                                onClick={handleSaveEditPangan}
+                                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
+                            >
+                                Save
+                            </button>
+                            <button
+                                onClick={() => setIsEditingPangan(false)}
+                                className="bg-gray-500 text-white px-4 py-2 rounded"
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </form>
-            <a href="/pages/admin/informasi">Halaman Informasi Wilayah</a>
+            )}
         </div>
     );
 }

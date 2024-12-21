@@ -251,7 +251,6 @@ export default function DataPetani() {
                 </button>
             </div>
         </form>
-
         </div>
     );
 }
