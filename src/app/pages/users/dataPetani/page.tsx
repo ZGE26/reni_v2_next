@@ -1,14 +1,10 @@
 "use client";
 import Navbar from "@/components_dashboard/Navbar";
-import React from 'react';
-import Link from 'next/link';
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function DataPetani() {
-
-    // Handler Agar Harus Login Terlebih Dahulu Jika Ke Halaman Ini
-    if(localStorage.getItem("token") === null) {
-        window.location.href = "/pages/login"
+    if (localStorage.getItem("token") === null) {
+        window.location.href = "/pages/login";
     }
 
     const [formatData, setFormatData] = useState({
@@ -28,7 +24,55 @@ export default function DataPetani() {
         lahan_id: "",
     });
 
-    // Fungsi untuk menangani perubahan input
+    const [wilayahData, setWilayahData] = useState<any[]>([]); // State untuk menyimpan data wilayah
+    const [panganData, setPanganData] = useState<any[]>([]);
+    const [error, setError] = useState<string>("");
+
+    // Fungsi untuk GET data wilayah
+    const fetchWilayahData = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/wilayah`, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setWilayahData(Array.isArray(data.data) ? data.data : []);
+            } else {
+                setError("Gagal mengambil data wilayah.");
+            }
+        } catch (err) {
+            setError("Terjadi kesalahan saat mengambil data wilayah.");
+        }
+    };
+
+    const fetchPanganData = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/pangan`, {
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token"),
+                },
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setPanganData(Array.isArray(data.data) ? data.data : []);
+            } else {
+                setError("Gagal mengambil data pangan.");
+            }
+        } catch (err) {
+            setError("Terjadi kesalahan saat mengambil data pangan.");
+        }
+    };
+
+    // Jalankan fetchWilayahData saat komponen dimuat
+    useEffect(() => {
+        fetchWilayahData();
+        fetchPanganData();
+    }, []);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormatData({
@@ -38,23 +82,20 @@ export default function DataPetani() {
     };
 
     const handleChange2 = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const {name, value} = e.target;
+        const { name, value } = e.target;
         setPanen({
             ...dataPanen,
             [name]: value,
         });
     };
 
-    // Fungsi untuk menangani pengiriman formulir
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // Kirim data ke API untuk registrasi
         try {
             const response = await fetch("http://localhost:8000/lahan", {
                 method: "POST",
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    Authorization: "Bearer " + localStorage.getItem("token"),
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(formatData),
@@ -63,30 +104,22 @@ export default function DataPetani() {
             const result = await response.json();
 
             if (response.ok) {
-                // Menampilkan pesan sukses
                 alert("Input Lahan Berhasil!");
-                console.log(result)
-                // window.location.href = "/pages/users/dashboard";
             } else {
-                // Menampilkan pesan error
-                console.log(result)
                 alert(`Error: ${result.message}`);
             }
         } catch (error) {
-            console.error("Error during input lahan:", error);
             alert("Terjadi kesalahan saat melakukan input lahan.");
         }
     };
 
     const handleSubmit2 = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // Kirim data ke API untuk registrasi
         try {
             const response = await fetch("http://localhost:8000/data-panen", {
                 method: "POST",
                 headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem('token'),
+                    Authorization: "Bearer " + localStorage.getItem("token"),
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(dataPanen),
@@ -95,18 +128,12 @@ export default function DataPetani() {
             const result = await response.json();
 
             if (response.ok) {
-                // Menampilkan pesan sukses
                 alert("Input Data Panen Berhasil!");
-                console.log(result)
-                // window.location.href = "/pages/users/dashboard";
             } else {
-                // Menampilkan pesan error
-                console.log(result)
                 alert(`Error: ${result.message}`);
             }
         } catch (error) {
-            console.error("Error during input lahan:", error);
-            alert("Terjadi kesalahan saat melakukan input data.");
+            alert("Terjadi kesalahan saat melakukan input data panen.");
         }
     };
 
@@ -117,140 +144,163 @@ export default function DataPetani() {
 
             <h2>Input Lahan</h2>
             <form onSubmit={handleSubmit}>
-            <label>Luas Lahan (m2)</label>
-            <input 
-                type="number"
-                name="luas_lahan"
-                value={formatData.luas_lahan}
-                placeholder="Masukkan Luas Lahan"
-                onChange={handleChange}
-            />
-
-            <br />
-
-            <label>Lokasi</label>
-            <input 
-                type="text"
-                name="lokasi"
-                value={formatData.lokasi}
-                placeholder="Masukkan Lokasi"
-                onChange={handleChange}
-            />
-
-            <br />
-
-            <label>Name</label>
-            <input 
-                type="text"
-                name="name"
-                value={formatData.name}
-                placeholder="Masukkan Nama Lahan"
-                onChange={handleChange}
-            />
-
-            <br />
-
-            <label>Wilayah</label>
-            <input 
-                type="number"
-                name="wilayah_id"
-                value={formatData.wilayah_id}
-                placeholder="Masukkan ID Wilayah"
-                onChange={handleChange}
-            />
-
-            <br />
-
-            {/* Submit Button */}
-            <div className="mt-6">
-                        <button
-                            type="submit"
-                            className="w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-2 rounded-md font-semibold hover:bg-gradient-to-l"
-                        >
-                            Submit
-                        </button>
-                    </div>
-
+                <label>Luas Lahan (m2)</label>
+                <input
+                    type="number"
+                    name="luas_lahan"
+                    value={formatData.luas_lahan}
+                    placeholder="Masukkan Luas Lahan"
+                    onChange={handleChange}
+                />
+                <br />
+                <label>Lokasi</label>
+                <input
+                    type="text"
+                    name="lokasi"
+                    value={formatData.lokasi}
+                    placeholder="Masukkan Lokasi"
+                    onChange={handleChange}
+                />
+                <br />
+                <label>Nama Lahan</label>
+                <input
+                    type="text"
+                    name="name"
+                    value={formatData.name}
+                    placeholder="Masukkan Nama Lahan"
+                    onChange={handleChange}
+                />
+                <br />
+                <label>ID Wilayah</label>
+                <input
+                    type="number"
+                    name="wilayah_id"
+                    value={formatData.wilayah_id}
+                    placeholder="Masukkan ID Wilayah"
+                    onChange={handleChange}
+                />
+                <br />
+                <div className="mt-6">
+                    <button
+                        type="submit"
+                        className="w-full bg-green-500 text-white py-2 rounded-md font-semibold"
+                    >
+                        Submit
+                    </button>
+                </div>
             </form>
 
-            <h2>Input Data Panen</h2>
-            
+            {/* Tabel Wilayah */}
+            <h2 className="mt-8">Data Wilayah</h2>
+            <table className="min-w-full bg-white border border-gray-300 mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Wilayah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {wilayahData.length > 0 ? (
+                        wilayahData.map((wilayah: any) => (
+                            <tr key={wilayah.id}>
+                                <td>{wilayah.id}</td>
+                                <td>{wilayah.name}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={3} className="text-center py-4">
+                                Tidak ada data wilayah.
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+
+            <h2 className="mt-8">Input Data Panen</h2>
             <form onSubmit={handleSubmit2}>
-            {/* Tanggal Penanaman */}
-            <label>Tanggal Penanaman</label>
-            <input
-                type="date"
-                name="tanggal_penanaman"
-                value={dataPanen.tanggal_penanaman}
-                placeholder="Masukkan Tanggal Penanaman"
-                onChange={handleChange2}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-            />
-            <br />
+                <label>Tanggal Penanaman</label>
+                <input
+                    type="date"
+                    name="tanggal_penanaman"
+                    value={dataPanen.tanggal_penanaman}
+                    onChange={handleChange2}
+                    required
+                />
+                <br />
+                <label>Tanggal Panen</label>
+                <input
+                    type="date"
+                    name="tanggal_panen"
+                    value={dataPanen.tanggal_panen}
+                    onChange={handleChange2}
+                    required
+                />
+                <br />
+                <label>Pangan ID</label>
+                <input
+                    type="number"
+                    name="pangan_id"
+                    value={dataPanen.pangan_id}
+                    onChange={handleChange2}
+                    required
+                />
+                <br />
+                <label>Hasil Panen</label>
+                <input
+                    type="number"
+                    name="hasil_panen"
+                    value={dataPanen.hasil_panen}
+                    onChange={handleChange2}
+                    required
+                />
+                <br />
+                <label>Lahan ID</label>
+                <input
+                    type="number"
+                    name="lahan_id"
+                    value={dataPanen.lahan_id}
+                    onChange={handleChange2}
+                    required
+                />
+                <br />
+                <div className="mt-6">
+                    <button
+                        type="submit"
+                        className="w-full bg-green-500 text-white py-2 rounded-md font-semibold"
+                    >
+                        Submit
+                    </button>
+                </div>
+            </form>
 
-            {/* Tanggal Panen */}
-            <label>Tanggal Panen</label>
-            <input
-                type="date"
-                name="tanggal_panen"
-                value={dataPanen.tanggal_panen}
-                placeholder="Masukkan Tanggal Panen"
-                onChange={handleChange2}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-            />
-            <br />
-
-            {/* Pangan ID */}
-            <label>Pangan ID</label>
-            <input
-                type="number"
-                name="pangan_id"
-                value={dataPanen.pangan_id}
-                placeholder="Masukkan Pangan ID"
-                onChange={handleChange2}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-            />
-            <br />
-
-            {/* Hasil Panen */}
-            <label>Hasil Panen</label>
-            <input
-                type="number"
-                name="hasil_panen"
-                value={dataPanen.hasil_panen}
-                placeholder="Masukkan Hasil Panen"
-                onChange={handleChange2}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-            />
-            <br />
-
-            {/* Lahan ID */}
-            <label>Lahan ID</label>
-            <input
-                type="number"
-                name="lahan_id"
-                value={dataPanen.lahan_id}
-                placeholder="Masukkan Lahan ID"
-                onChange={handleChange2}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-                required
-            />
-            <br />
-
-            {/* Submit Button */}
-            <div className="mt-6">
-                <button
-                    type="submit"
-                    className="w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-2 rounded-md font-semibold hover:bg-gradient-to-l"
-                >
-                    Submit
-                </button>
-            </div>
-        </form>
+            {/* Tabel Pangan */}
+            <h2 className="mt-8">Data Pangan</h2>
+            <table className="min-w-full bg-white border border-gray-300 mt-4">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nama Pangan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {panganData.length > 0 ? (
+                        panganData.map((pangan: any) => (
+                            <tr key={pangan.id}>
+                                <td>{pangan.id}</td>
+                                <td>{pangan.name}</td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan={3} className="text-center py-4">
+                                Tidak ada data pangan.
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+            <a href="http://localhost:3000/pages/users/detail"><u>More Information</u></a>
         </div>
     );
 }
