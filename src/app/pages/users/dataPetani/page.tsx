@@ -212,6 +212,7 @@ export default function DataPetani() {
                     alert(`Error: ${result.message}`);
                 }
             } catch (error) {
+                console.log(error);
                 alert("Terjadi kesalahan saat melakukan update data lahan.");
             }
         }
@@ -301,197 +302,260 @@ export default function DataPetani() {
         <div className="container mx-auto p-6">
             <Navbar />
             <h1 className="text-3xl font-bold mb-6">Manajemen Lahan dan Panen</h1>
-            
-            {/* Form Input Lahan */}
+
+            {/* Form to add new Lahan */}
             <div className="mb-6">
-                <h2 className="text-2xl font-semibold mb-3">Input Data Lahan</h2>
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <h2 className="text-2xl font-semibold">Tambah Lahan</h2>
+                <form onSubmit={handleSubmit}>
                     <input
                         type="text"
                         name="name"
                         value={formatData.name}
                         onChange={handleChange}
+                        className="border border-gray-300 p-2 mb-2 w-full"
                         placeholder="Nama Lahan"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
                     />
                     <input
                         type="text"
                         name="lokasi"
                         value={formatData.lokasi}
                         onChange={handleChange}
+                        className="border border-gray-300 p-2 mb-2 w-full"
                         placeholder="Lokasi"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
                     />
                     <input
-                        type="number"
+                        type="text"
                         name="luas_lahan"
                         value={formatData.luas_lahan}
                         onChange={handleChange}
+                        className="border border-gray-300 p-2 mb-2 w-full"
                         placeholder="Luas Lahan"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
                     />
                     <select
                         name="wilayah_id"
                         value={formatData.wilayah_id}
                         onChange={handleChange}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                        className="border border-gray-300 p-2 mb-2 w-full"
                     >
                         <option value="">Pilih Wilayah</option>
-                        {wilayahData.map((wilayah: any) => (
+                        {wilayahData.map((wilayah) => (
                             <option key={wilayah.id} value={wilayah.id}>
                                 {wilayah.name}
                             </option>
                         ))}
                     </select>
-                    <button type="submit" className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                        Submit Lahan
+                    <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">
+                        Tambah Lahan
                     </button>
                 </form>
             </div>
 
-            {/* Table Lahan */}
+            {/* Form to add new Panen */}
             <div className="mb-6">
-                <h2 className="text-2xl font-semibold mb-3">Data Lahan</h2>
-                <table className="min-w-full bg-white border border-gray-300 rounded-md shadow-md">
-                    <thead>
-                        <tr>
-                            <th className="px-4 py-2 border-b">ID</th>
-                            <th className="px-4 py-2 border-b">Nama</th>
-                            <th className="px-4 py-2 border-b">Lokasi</th>
-                            <th className="px-4 py-2 border-b">Luas Lahan</th>
-                            <th className="px-4 py-2 border-b">Wilayah</th>
-                            <th className="px-4 py-2 border-b">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {lahanData.map((lahan: any) => (
-                            <tr key={lahan.id}>
-                                <td className="px-4 py-2 border-b">{lahan.id}</td>
-                                <td className="px-4 py-2 border-b">{lahan.name}</td>
-                                <td className="px-4 py-2 border-b">{lahan.lokasi}</td>
-                                <td className="px-4 py-2 border-b">{lahan.luas_lahan}</td>
-                                <td className="px-4 py-2 border-b">{lahan.wilayah_name}</td>
-                                <td className="px-4 py-2 border-b">
-                                    <button
-                                        onClick={() => handleOpenUpdateModalLahan(lahan.id)}
-                                        className="text-blue-500 hover:text-blue-600 mr-2"
-                                    >
-                                        Update
-                                    </button>
-                                    <button
-                                        onClick={() => handleDeleteLahan(lahan.id)}
-                                        className="text-red-500 hover:text-red-600"
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-
-            {/* Form Input Panen */}
-            <div className="mb-6">
-                <h2 className="text-2xl font-semibold mb-3">Input Data Panen</h2>
-                <form onSubmit={handleSubmit2} className="space-y-4">
+                <h2 className="text-2xl font-semibold">Tambah Panen</h2>
+                <form onSubmit={handleSubmit2}>
                     <input
-                        type="date"
-                        name="tanggal_penanaman"
-                        value={dataPanen.tanggal_penanaman}
+                        type="text"
+                        name="hasil_panen"
+                        value={dataPanen.hasil_panen}
                         onChange={handleChange2}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                    />
-                    <input
-                        type="date"
-                        name="tanggal_panen"
-                        value={dataPanen.tanggal_panen}
-                        onChange={handleChange2}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                        className="border border-gray-300 p-2 mb-2 w-full"
+                        placeholder="Hasil Panen"
                     />
                     <select
                         name="pangan_id"
                         value={dataPanen.pangan_id}
                         onChange={handleChange2}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                        className="border border-gray-300 p-2 mb-2 w-full"
                     >
                         <option value="">Pilih Pangan</option>
-                        {panganData.map((pangan: any) => (
+                        {panganData.map((pangan) => (
                             <option key={pangan.id} value={pangan.id}>
                                 {pangan.name}
                             </option>
                         ))}
                     </select>
                     <input
-                        type="number"
-                        name="hasil_panen"
-                        value={dataPanen.hasil_panen}
+                        type="date"
+                        name="tanggal_penanaman"
+                        value={dataPanen.tanggal_penanaman}
                         onChange={handleChange2}
-                        placeholder="Hasil Panen"
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
+                        className="border border-gray-300 p-2 mb-2 w-full"
                     />
-                    <select
-                        name="lahan_id"
-                        value={dataPanen.lahan_id}
+                    <input
+                        type="date"
+                        name="tanggal_panen"
+                        value={dataPanen.tanggal_panen}
                         onChange={handleChange2}
-                        className="w-full px-4 py-2 border border-gray-300 rounded-md"
-                    >
-                        <option value="">Pilih Lahan</option>
-                        {lahanData.map((lahan: any) => (
-                            <option key={lahan.id} value={lahan.id}>
-                                {lahan.name}
-                            </option>
-                        ))}
-                    </select>
-                    <button type="submit" className="w-full bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
-                        Submit Data Panen
+                        className="border border-gray-300 p-2 mb-2 w-full"
+                    />
+                    <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded-md">
+                        Tambah Panen
                     </button>
                 </form>
             </div>
 
-            {/* Table Panen */}
-            <div className="mb-6">
-                <h2 className="text-2xl font-semibold mb-3">Data Panen</h2>
-                <table className="min-w-full bg-white border border-gray-300 rounded-md shadow-md">
-                    <thead>
-                        <tr>
-                            <th className="px-4 py-2 border-b">ID</th>
-                            <th className="px-4 py-2 border-b">Tanggal Penanaman</th>
-                            <th className="px-4 py-2 border-b">Tanggal Panen</th>
-                            <th className="px-4 py-2 border-b">Pangan</th>
-                            <th className="px-4 py-2 border-b">Hasil Panen</th>
-                            <th className="px-4 py-2 border-b">Lahan</th>
-                            <th className="px-4 py-2 border-b">Aksi</th>
+            {/* Table to display Lahan */}
+            <h2 className="text-2xl font-semibold mb-4">Data Lahan</h2>
+            <table className="table-auto w-full">
+                <thead>
+                    <tr>
+                        <th>Nama Lahan</th>
+                        <th>Lokasi</th>
+                        <th>Luas Lahan</th>
+                        <th>Wilayah</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {lahanData.map((lahan: any) => (
+                        <tr key={lahan.id}>
+                            <td>{lahan.name}</td>
+                            <td>{lahan.lokasi}</td>
+                            <td>{lahan.luas_lahan}</td>
+                            <td>{lahan.wilayah_id}</td>
+                            <td>
+                                <button
+                                    onClick={() => handleOpenUpdateModalLahan(lahan.id)}
+                                    className="bg-yellow-500 text-white px-4 py-2 rounded-md"
+                                >
+                                    Update
+                                </button>
+                                <button
+                                    onClick={() => handleDeleteLahan(lahan.id)}
+                                    className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
+                                >
+                                    Delete
+                                </button>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {panenData.map((panen: any) => (
-                            <tr key={panen.id}>
-                                <td className="px-4 py-2 border-b">{panen.id}</td>
-                                <td className="px-4 py-2 border-b">{panen.tanggal_penanaman}</td>
-                                <td className="px-4 py-2 border-b">{panen.tanggal_panen}</td>
-                                <td className="px-4 py-2 border-b">{panen.pangan_name}</td>
-                                <td className="px-4 py-2 border-b">{panen.hasil_panen}</td>
-                                <td className="px-4 py-2 border-b">{panen.lahan_name}</td>
-                                <td className="px-4 py-2 border-b">
-                                    <button
-                                        onClick={() => handleOpenUpdateModalPanen(panen.id)}
-                                        className="text-blue-500 hover:text-blue-600 mr-2"
-                                    >
-                                        Update
-                                    </button>
-                                    <button
-                                        onClick={() => handleDeletePanen(panen.id)}
-                                        className="text-red-500 hover:text-red-600"
-                                    >
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+                    ))}
+                </tbody>
+            </table>
+
+            {/* Table to display Panen */}
+            <h2 className="text-2xl font-semibold mb-4">Data Panen</h2>
+            <table className="table-auto w-full">
+                <thead>
+                    <tr>
+                        <th>Hasil Panen</th>
+                        <th>Pangan</th>
+                        <th>Tanggal Penanaman</th>
+                        <th>Tanggal Panen</th>
+                        <th>Aksi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {panenData.map((panen: any) => (
+                        <tr key={panen.id}>
+                            <td>{panen.hasil_panen}</td>
+                            <td>{panen.pangan_id}</td>
+                            <td>{panen.tanggal_penanaman}</td>
+                            <td>{panen.tanggal_panen}</td>
+                            <td>
+                                <button
+                                    onClick={() => handleOpenUpdateModalPanen(panen.id)}
+                                    className="bg-yellow-500 text-white px-4 py-2 rounded-md"
+                                >
+                                    Update
+                                </button>
+                                <button
+                                    onClick={() => handleDeletePanen(panen.id)}
+                                    className="bg-red-500 text-white px-4 py-2 rounded-md ml-2"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            {/* Modal for updating Lahan or Panen */}
+            {showModal && (
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center">
+        <div className="bg-white p-6 rounded-md w-96">
+            <h2 className="text-xl font-semibold mb-4">Update Data</h2>
+
+            {/* Cek jika selectedLahan ada, tampilkan modal untuk Lahan */}
+            {selectedLahan && !selectedPanen && (
+                <div>
+                    <input
+                        type="text"
+                        name="name"
+                        value={selectedLahan.name}
+                        onChange={(e) => setSelectedLahan({ ...selectedLahan, name: e.target.value })}
+                        placeholder="Nama Lahan"
+                        className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md"
+                    />
+                    <input
+                        type="text"
+                        name="lokasi"
+                        value={selectedLahan.lokasi}
+                        onChange={(e) => setSelectedLahan({ ...selectedLahan, lokasi: e.target.value })}
+                        placeholder="Lokasi"
+                        className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md"
+                    />
+                    <input
+                        type="number"
+                        name="luas_lahan"
+                        value={selectedLahan.luas_lahan}
+                        onChange={(e) => setSelectedLahan({ ...selectedLahan, luas_lahan: e.target.value })}
+                        placeholder="Luas Lahan"
+                        className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md"
+                    />
+                    <button
+                        onClick={handleUpdateLahan}
+                        className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                    >
+                        Update Lahan
+                    </button>
+                </div>
+            )}
+
+            {/* Cek jika selectedPanen ada, tampilkan modal untuk Panen */}
+            {selectedPanen && !selectedLahan && (
+                <div>
+                    <input
+                        type="date"
+                        name="tanggal_penanaman"
+                        value={selectedPanen.tanggal_penanaman}
+                        onChange={(e) => setSelectedPanen({ ...selectedPanen, tanggal_penanaman: e.target.value })}
+                        className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md"
+                    />
+                    <input
+                        type="date"
+                        name="tanggal_panen"
+                        value={selectedPanen.tanggal_panen}
+                        onChange={(e) => setSelectedPanen({ ...selectedPanen, tanggal_panen: e.target.value })}
+                        className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md"
+                    />
+                    <input
+                        type="text"
+                        name="hasil_panen"
+                        value={selectedPanen.hasil_panen}
+                        onChange={(e) => setSelectedPanen({ ...selectedPanen, hasil_panen: e.target.value })}
+                        className="w-full px-4 py-2 mb-4 border border-gray-300 rounded-md"
+                    />
+                    <button
+                        onClick={handleUpdatePanen}
+                        className="w-full bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+                    >
+                        Update Panen
+                    </button>
+                </div>
+            )}
+
+            <button
+                onClick={() => setShowModal(false)}
+                className="w-full bg-gray-300 text-gray-700 px-4 py-2 rounded-md mt-4"
+            >
+                Close
+            </button>
+        </div>
+    </div>
+)}
+
         </div>
     );
 }
