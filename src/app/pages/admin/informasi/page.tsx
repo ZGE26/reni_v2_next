@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 
 export default function Informasi() {
+    // Redirect jika token atau role_id tidak sesuai
     if (localStorage.getItem("token") === null) {
         window.location.href = "/pages/login";
     }
@@ -26,52 +27,23 @@ export default function Informasi() {
         wilayah_id: "",
     });
 
-    // Fungsi untuk menangani perubahan input pada form air
+    // Handler perubahan input
     const handleAirChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setAirData({
-            ...airData,
-            [name]: value,
-        });
+        setAirData({ ...airData, [name]: value });
     };
 
-    // Fungsi untuk menangani perubahan input pada form tanah
     const handleTanahChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setTanahData({
-            ...tanahData,
-            [name]: value,
-        });
+        setTanahData({ ...tanahData, [name]: value });
     };
 
-    // Fungsi untuk menangani perubahan input pada form suhu
     const handleSuhuChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setSuhuData({
-            ...suhuData,
-            [name]: value,
-        });
+        setSuhuData({ ...suhuData, [name]: value });
     };
 
-    // Fungsi untuk submit form air
-    const handleSubmitAir = async (e: React.FormEvent) => {
-        e.preventDefault();
-        await submitData("http://localhost:8000/informasi-air", airData, "Input Air Berhasil");
-    };
-
-    // Fungsi untuk submit form tanah
-    const handleSubmitTanah = async (e: React.FormEvent) => {
-        e.preventDefault();
-        await submitData("http://localhost:8000/informasi-tanah", tanahData, "Input Tanah Berhasil");
-    };
-
-    // Fungsi untuk submit form suhu
-    const handleSubmitSuhu = async (e: React.FormEvent) => {
-        e.preventDefault();
-        await submitData("http://localhost:8000/informasi-suhu", suhuData, "Input Suhu Berhasil");
-    };
-
-    // Fungsi umum untuk submit data
+    // Fungsi submit data
     const submitData = async (url: string, data: object, successMessage: string) => {
         try {
             const response = await fetch(url, {
@@ -84,123 +56,140 @@ export default function Informasi() {
             });
 
             const result = await response.json();
-            console.log(result);
-
             if (response.ok) {
                 alert(successMessage);
                 window.location.reload();
             } else {
-                console.error(response);
                 alert(`Error: ${result.message}`);
             }
         } catch (error) {
-            console.error("Error during input:", error);
             alert("Terjadi kesalahan saat input data.");
         }
     };
 
+    // Fungsi submit untuk setiap form
+    const handleSubmitAir = (e: React.FormEvent) => {
+        e.preventDefault();
+        submitData("http://localhost:8000/informasi-air", airData, "Input Air Berhasil");
+    };
+
+    const handleSubmitTanah = (e: React.FormEvent) => {
+        e.preventDefault();
+        submitData("http://localhost:8000/informasi-tanah", tanahData, "Input Tanah Berhasil");
+    };
+
+    const handleSubmitSuhu = (e: React.FormEvent) => {
+        e.preventDefault();
+        submitData("http://localhost:8000/informasi-suhu", suhuData, "Input Suhu Berhasil");
+    };
+
     return (
-        <div>
-            {/* Form Air */}
-            <form onSubmit={handleSubmitAir}>
-                <h2 className="text-lg font-bold mb-4">Form Informasi Air</h2>
+        <div className="max-w-4xl mx-auto p-6 bg-gray-50 min-h-screen">
+            <a href="http://localhost:3000/pages/admin/dashboard"><u>Dashboard</u></a> <br />
+            <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+                Form Informasi Data
+            </h1>
+
+            {/* Form Informasi Air */}
+            <form onSubmit={handleSubmitAir} className="mb-8 bg-white p-6 shadow rounded-lg">
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">Informasi Air</h2>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-medium mb-2">Deskripsi</label>
+                    <label className="block text-gray-600 mb-2">Deskripsi</label>
                     <input
                         type="text"
                         name="content"
                         value={airData.content}
-                        placeholder="Masukkan Deskripsi"
                         onChange={handleAirChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        placeholder="Masukkan Deskripsi"
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-green-300"
                         required
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-medium mb-2">ID Wilayah</label>
+                    <label className="block text-gray-600 mb-2">ID Wilayah</label>
                     <input
                         type="number"
                         name="wilayah_id"
                         value={airData.wilayah_id}
-                        placeholder="Masukkan ID Wilayah"
                         onChange={handleAirChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        placeholder="Masukkan ID Wilayah"
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-green-300"
                         required
                     />
                 </div>
                 <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-2 rounded-md font-semibold hover:bg-gradient-to-l"
+                    className="w-full py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600"
                 >
                     Submit
                 </button>
             </form>
 
-            {/* Form Tanah */}
-            <form onSubmit={handleSubmitTanah}>
-                <h2 className="text-lg font-bold mt-8 mb-4">Form Informasi Tanah</h2>
+            {/* Form Informasi Tanah */}
+            <form onSubmit={handleSubmitTanah} className="mb-8 bg-white p-6 shadow rounded-lg">
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">Informasi Tanah</h2>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-medium mb-2">Deskripsi</label>
+                    <label className="block text-gray-600 mb-2">Deskripsi</label>
                     <input
                         type="text"
                         name="content"
                         value={tanahData.content}
-                        placeholder="Masukkan Deskripsi"
                         onChange={handleTanahChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        placeholder="Masukkan Deskripsi"
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-green-300"
                         required
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-medium mb-2">ID Wilayah</label>
+                    <label className="block text-gray-600 mb-2">ID Wilayah</label>
                     <input
                         type="number"
                         name="wilayah_id"
                         value={tanahData.wilayah_id}
-                        placeholder="Masukkan ID Wilayah"
                         onChange={handleTanahChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        placeholder="Masukkan ID Wilayah"
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-green-300"
                         required
                     />
                 </div>
                 <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-2 rounded-md font-semibold hover:bg-gradient-to-l"
+                    className="w-full py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600"
                 >
                     Submit
                 </button>
             </form>
 
-            {/* Form Suhu */}
-            <form onSubmit={handleSubmitSuhu}>
-                <h2 className="text-lg font-bold mt-8 mb-4">Form Informasi Suhu</h2>
+            {/* Form Informasi Suhu */}
+            <form onSubmit={handleSubmitSuhu} className="bg-white p-6 shadow rounded-lg">
+                <h2 className="text-xl font-semibold text-gray-700 mb-4">Informasi Suhu</h2>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-medium mb-2">Deskripsi</label>
+                    <label className="block text-gray-600 mb-2">Deskripsi</label>
                     <input
                         type="text"
                         name="content"
                         value={suhuData.content}
-                        placeholder="Masukkan Deskripsi"
                         onChange={handleSuhuChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        placeholder="Masukkan Deskripsi"
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-green-300"
                         required
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-medium mb-2">ID Wilayah</label>
+                    <label className="block text-gray-600 mb-2">ID Wilayah</label>
                     <input
                         type="number"
                         name="wilayah_id"
                         value={suhuData.wilayah_id}
-                        placeholder="Masukkan ID Wilayah"
                         onChange={handleSuhuChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        placeholder="Masukkan ID Wilayah"
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:ring-green-300"
                         required
                     />
                 </div>
                 <button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-green-400 to-green-500 text-white py-2 rounded-md font-semibold hover:bg-gradient-to-l"
+                    className="w-full py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600"
                 >
                     Submit
                 </button>

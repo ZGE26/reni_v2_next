@@ -189,59 +189,77 @@ export default function Dashboard() {
     }, []);
 
     return (
-        <div>
+        <div className="container mx-auto p-6">
             {/* Error Display */}
             {error && <p className="text-red-500">{error}</p>}
-
+            <a href="http://localhost:3000/pages/admin/detail_informasi"><u>Detail Informasi</u></a> <br />
+            <a href="http://localhost:3000/pages/admin/informasi"><u>Informasi</u></a> <br />
+            <a href="http://localhost:3000/pages/admin/artikel"><u>Artikel</u></a> <br />
             {/* Input Form for Wilayah */}
             <div className="mt-4">
-                <h3>Tambah Wilayah</h3>
+                <h3 className="text-lg font-bold">Tambah Wilayah</h3>
                 <input
                     type="text"
                     value={newWilayahName}
                     onChange={(e) => setNewWilayahName(e.target.value)}
                     placeholder="Nama Wilayah"
-                    className="p-2 border"
+                    className="p-2 border rounded"
                 />
-                <button onClick={handleCreateWilayah} className="ml-2 bg-green-500 text-white px-4 py-2 rounded">
+                <button
+                    onClick={handleCreateWilayah}
+                    className="ml-2 bg-green-500 text-white px-4 py-2 rounded"
+                >
                     Tambah Wilayah
                 </button>
             </div>
 
             {/* Input Form for Pangan */}
             <div className="mt-4">
-                <h3>Tambah Pangan</h3>
+                <h3 className="text-lg font-bold">Tambah Pangan</h3>
                 <input
                     type="text"
                     value={newPanganName}
                     onChange={(e) => setNewPanganName(e.target.value)}
                     placeholder="Nama Pangan"
-                    className="p-2 border"
+                    className="p-2 border rounded"
                 />
-                <button onClick={handleCreatePangan} className="ml-2 bg-green-500 text-white px-4 py-2 rounded">
+                <button
+                    onClick={handleCreatePangan}
+                    className="ml-2 bg-green-500 text-white px-4 py-2 rounded"
+                >
                     Tambah Pangan
                 </button>
             </div>
 
             {/* Render Wilayah Table */}
             <div className="mt-8">
-                <h2>Wilayah</h2>
-                <table className="min-w-full">
+            <h3 className="text-lg font-bold">Data Wilayah</h3>
+                <table className="table-auto w-full mt-4">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nama Wilayah</th>
-                            <th>Aksi</th>
+                            <th className="border px-4 py-2">ID</th>
+                            <th className="border px-4 py-2">Nama</th>
+                            <th className="border px-4 py-2">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {wilayahData.map((item: any) => (
-                            <tr key={item.id}>
-                                <td>{item.id}</td>
-                                <td>{item.name}</td>
-                                <td>
-                                    <button onClick={() => handleEdit(item, "wilayah")}>Edit</button>
-                                    <button onClick={() => handleDelete("wilayah", item.id, setWilayahData)}>Delete</button>
+                        {wilayahData.map((wilayah) => (
+                            <tr key={wilayah.id}>
+                                <td className="border px-4 py-2">{wilayah.id}</td>
+                                <td className="border px-4 py-2">{wilayah.name}</td>
+                                <td className="border px-4 py-2">
+                                    <button
+                                        onClick={() => handleEdit(wilayah, "wilayah")}
+                                        className="bg-yellow-500 text-white px-2 py-1 rounded"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete("wilayah", wilayah.id, setWilayahData)}
+                                        className="ml-2 bg-red-500 text-white px-2 py-1 rounded"
+                                    >
+                                        Hapus
+                                    </button>
                                 </td>
                             </tr>
                         ))}
@@ -251,87 +269,39 @@ export default function Dashboard() {
 
             {/* Render Pangan Table */}
             <div className="mt-8">
-                <h2>Pangan</h2>
-                <table className="min-w-full">
+                <h3 className="text-lg font-bold">Data Pangan</h3>
+                <table className="table-auto w-full mt-4">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nama Pangan</th>
-                            <th>Aksi</th>
+                            <th className="border px-4 py-2">ID</th>
+                            <th className="border px-4 py-2">Nama</th>
+                            <th className="border px-4 py-2">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {panganData.map((item: any) => (
-                            <tr key={item.id}>
-                                <td>{item.id}</td>
-                                <td>{item.name}</td>
-                                <td>
-                                    <button onClick={() => handleEdit(item, "pangan")}>Edit</button>
-                                    <button onClick={() => handleDelete("pangan", item.id, setPanganData)}>Delete</button>
+                        {panganData.map((pangan) => (
+                            <tr key={pangan.id}>
+                                <td className="border px-4 py-2">{pangan.id}</td>
+                                <td className="border px-4 py-2">{pangan.name}</td>
+                                <td className="border px-4 py-2">
+                                    <button
+                                        onClick={() => handleEdit(pangan, "pangan")}
+                                        className="bg-yellow-500 text-white px-2 py-1 rounded"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete("pangan", pangan.id, setPanganData)}
+                                        className="ml-2 bg-red-500 text-white px-2 py-1 rounded"
+                                    >
+                                        Hapus
+                                    </button>
                                 </td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
             </div>
-
-            {/* Modal for Editing Wilayah */}
-            {isEditingWilayah && (
-                <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-                    <div className="bg-white p-6 rounded shadow-lg">
-                        <h2>Edit Wilayah</h2>
-                        <input
-                            type="text"
-                            value={newWilayahName}
-                            onChange={(e) => setNewWilayahName(e.target.value)}
-                            className="p-2 border"
-                        />
-                        <div className="mt-4">
-                            <button
-                                onClick={handleSaveEditWilayah}
-                                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                            >
-                                Save
-                            </button>
-                            <button
-                                onClick={() => setIsEditingWilayah(false)}
-                                className="bg-gray-500 text-white px-4 py-2 rounded"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
-
-            {/* Modal for Editing Pangan */}
-            {isEditingPangan && (
-                <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-75">
-                    <div className="bg-white p-6 rounded shadow-lg">
-                        <h2>Edit Pangan</h2>
-                        <input
-                            type="text"
-                            value={newPanganName}
-                            onChange={(e) => setNewPanganName(e.target.value)}
-                            className="p-2 border"
-                        />
-                        <div className="mt-4">
-                            <button
-                                onClick={handleSaveEditPangan}
-                                className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
-                            >
-                                Save
-                            </button>
-                            <button
-                                onClick={() => setIsEditingPangan(false)}
-                                className="bg-gray-500 text-white px-4 py-2 rounded"
-                            >
-                                Cancel
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
