@@ -47,13 +47,10 @@ export default function Navbar() {
                             <a href="/pages/users/dashboard" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0" aria-current="page">Home</a>
                         </li>
                         <li>
-                            <a href="/pages/users/profil" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Profil</a>
+                            <a href="/pages/users/detail_informasi" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0" aria-current="page">Detail Informasi Wilayah</a>
                         </li>
                         <li>
                             <a href="/pages/users/dataPetani" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Data Pertanian</a>
-                        </li>
-                        <li>
-                            <a href="/pages/users/setting" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Pengaturan</a>
                         </li>
                         <li>
                             <a onClick={logout} href="/pages/login" className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0">Logout</a>

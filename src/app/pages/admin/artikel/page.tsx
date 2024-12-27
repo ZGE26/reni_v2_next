@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from "react";
 
 export default function Artikel() {
@@ -23,6 +23,8 @@ export default function Artikel() {
 
     const [artikelData, setArtikelData] = useState<any[]>([]);
     const [error, setError] = useState<string>("");
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    const [artikelToEdit, setArtikelToEdit] = useState<any | null>(null);
 
     const handleChangeArtikel = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -152,6 +154,22 @@ export default function Artikel() {
         }
     };
 
+    const openEditModal = (artikel: any) => {
+        setArtikelToEdit(artikel);
+        setNewArtikel({
+            title: artikel.title,
+            content: artikel.content,
+            image: artikel.image,
+            category: artikel.category,
+        });
+        setIsEditModalOpen(true);
+    };
+
+    const closeEditModal = () => {
+        setIsEditModalOpen(false);
+        setArtikelToEdit(null);
+    };
+
     useEffect(() => {
         fetchArtikelData();
     }, []);
@@ -193,6 +211,11 @@ export default function Artikel() {
                         onChange={handleImageChange}
                         className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
+                    {newArtikel.image && (
+                        <div className="mt-2">
+                            <img src={newArtikel.image} alt="Preview" className="w-32 h-32 object-cover rounded-md" />
+                        </div>
+                    )}
                 </div>
 
                 <div>
@@ -229,18 +252,24 @@ export default function Artikel() {
                 </thead>
                 <tbody>
                     {artikelData.length > 0 ? (
-                        artikelData.map((artikel: any) => (
+                        artikelData.map((artikel) => (
                             <tr key={artikel.id} className="border-t">
                                 <td className="px-6 py-4">{artikel.id}</td>
                                 <td className="px-6 py-4">{artikel.title}</td>
                                 <td className="px-6 py-4">{artikel.category}</td>
                                 <td className="px-6 py-4">{artikel.content}</td>
                                 <td className="px-6 py-4">
-                                    <img src={`http://localhost:8000/${artikel.image}`} width={100} height={100} alt="Artikel" className="rounded-md" />
+                                    <img
+                                        src={`http://localhost:8000/${artikel.image}`}
+                                        width={100}
+                                        height={100}
+                                        alt="Artikel"
+                                        className="rounded-md"
+                                    />
                                 </td>
                                 <td className="px-6 py-4 flex space-x-2">
                                     <button
-                                        onClick={() => handleUpdateArtikel(artikel.id)}
+                                        onClick={() => openEditModal(artikel)}
                                         className="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600"
                                     >
                                         Edit
@@ -256,13 +285,100 @@ export default function Artikel() {
                         ))
                     ) : (
                         <tr>
-                            <td colSpan={5} className="text-center py-4 text-gray-500">
+                            <td colSpan={6} className="text-center py-4 text-gray-500">
                                 Tidak ada data artikel.
                             </td>
                         </tr>
                     )}
                 </tbody>
             </table>
+
+            {/* Modal Edit Artikel */}
+            {isEditModalOpen && (
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex justify-center items-center">
+                    <div className="bg-white p-6 rounded-lg shadow-lg w-96">
+                        <h2 className="text-2xl font-bold text-gray-800 mb-4">Edit Artikel</h2>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                if (artikelToEdit) {
+                                    handleUpdateArtikel(artikelToEdit.id);
+                                    closeEditModal();
+                                }
+                            }}
+                        >
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Judul:</label>
+                                <input
+                                    type="text"
+                                    name="title"
+                                    value={newArtikel.title}
+                                    onChange={handleChangeArtikel}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Konten:</label>
+                                <textarea
+                                    name="content"
+                                    value={newArtikel.content}
+                                    onChange={(e) => setNewArtikel({ ...newArtikel, content: e.target.value })}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    required
+                                ></textarea>
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Kategori:</label>
+                                <input
+                                    type="text"
+                                    name="category"
+                                    value={newArtikel.category}
+                                    onChange={handleChangeArtikel}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    required
+                                />
+                            </div>
+
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Gambar (Upload):</label>
+                                <input
+                                    type="file"
+                                    name="image"
+                                    accept="image/*"
+                                    onChange={handleImageChange}
+                                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                />
+                                {newArtikel.image && (
+                                    <div className="mt-2">
+                                        <img
+                                            src={newArtikel.image}
+                                            alt="Preview"
+                                            className="w-32 h-32 object-cover rounded-md"
+                                        />
+                                    </div>
+                                )}
+                            </div>
+
+                            <button
+                                type="submit"
+                                className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 w-full mt-4"
+                            >
+                                Simpan Perubahan
+                            </button>
+                            <button
+                                type="button"
+                                onClick={closeEditModal}
+                                className="mt-4 w-full text-center text-gray-500"
+                            >
+                                Batal
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

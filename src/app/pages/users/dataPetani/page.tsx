@@ -375,6 +375,19 @@ export default function DataPetani() {
                             </option>
                         ))}
                     </select>
+                    <select
+                        name="lahan_id"
+                        value={dataPanen.lahan_id}
+                        onChange={handleChange2}
+                        className="border border-gray-300 p-2 mb-2 w-full"
+                    >
+                        <option value="">Pilih Lahan</option>
+                        {lahanData.map((lahan) => (
+                            <option key={lahan.id} value={lahan.id}>
+                                {lahan.name}
+                            </option>
+                        ))}
+                    </select>
                     <input
                         type="date"
                         name="tanggal_penanaman"

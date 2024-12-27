@@ -9,17 +9,25 @@ export default function Dashboard() {
         window.location.href = "/pages/users/dashboard";
     }
 
+    const logout = () => {
+        if (localStorage.getItem("token") != null) {
+            localStorage.removeItem('token');
+        }
+    }
+
     // State untuk form wilayah
     const [wilayahData, setWilayahData] = useState<any[]>([]);
     const [currentWilayah, setCurrentWilayah] = useState<any>(null);
     const [isEditingWilayah, setIsEditingWilayah] = useState(false);
     const [newWilayahName, setNewWilayahName] = useState("");
+    const [editedWilayahName, setEditedWilayahName] = useState("");
 
     // State untuk form pangan
     const [panganData, setPanganData] = useState<any[]>([]);
     const [currentPangan, setCurrentPangan] = useState<any>(null);
     const [isEditingPangan, setIsEditingPangan] = useState(false);
     const [newPanganName, setNewPanganName] = useState("");
+    const [editedPanganName, setEditedPanganName] = useState("");
 
     // State untuk error
     const [error, setError] = useState<string>("");
@@ -70,15 +78,15 @@ export default function Dashboard() {
         if (endpoint === "wilayah") {
             setCurrentWilayah(data);
             setIsEditingWilayah(true);
-            setNewWilayahName(data.name);
+            setEditedWilayahName(data.name); // Gunakan editedWilayahName
         } else if (endpoint === "pangan") {
             setCurrentPangan(data);
             setIsEditingPangan(true);
-            setNewPanganName(data.name);
+            setEditedPanganName(data.name); // Gunakan editedPanganName
         }
     };
+    
 
-    // Handle save edited wilayah
     const handleSaveEditWilayah = async () => {
         try {
             const response = await fetch(`http://localhost:8000/wilayah/${currentWilayah.id}`, {
@@ -88,10 +96,10 @@ export default function Dashboard() {
                     Authorization: "Bearer " + localStorage.getItem("token"),
                 },
                 body: JSON.stringify({
-                    name: newWilayahName,
+                    name: editedWilayahName, // Gunakan editedWilayahName
                 }),
             });
-
+    
             if (response.ok) {
                 alert("Data berhasil diperbarui!");
                 setIsEditingWilayah(false);
@@ -103,8 +111,7 @@ export default function Dashboard() {
             console.error("Terjadi kesalahan saat menyimpan data wilayah");
         }
     };
-
-    // Handle save edited pangan
+    
     const handleSaveEditPangan = async () => {
         try {
             const response = await fetch(`http://localhost:8000/pangan/${currentPangan.id}`, {
@@ -114,10 +121,10 @@ export default function Dashboard() {
                     Authorization: "Bearer " + localStorage.getItem("token"),
                 },
                 body: JSON.stringify({
-                    name: newPanganName,
+                    name: editedPanganName, // Gunakan editedPanganName
                 }),
             });
-
+    
             if (response.ok) {
                 alert("Data berhasil diperbarui!");
                 setIsEditingPangan(false);
@@ -129,6 +136,7 @@ export default function Dashboard() {
             console.error("Terjadi kesalahan saat menyimpan data pangan");
         }
     };
+    
 
     // Handle create new wilayah
     const handleCreateWilayah = async () => {
@@ -195,6 +203,7 @@ export default function Dashboard() {
             <a href="http://localhost:3000/pages/admin/detail_informasi"><u>Detail Informasi</u></a> <br />
             <a href="http://localhost:3000/pages/admin/informasi"><u>Informasi</u></a> <br />
             <a href="http://localhost:3000/pages/admin/artikel"><u>Artikel</u></a> <br />
+            <a onClick={logout}  href="/pages/login"><u>Logout</u></a>
             {/* Input Form for Wilayah */}
             <div className="mt-4">
                 <h3 className="text-lg font-bold">Tambah Wilayah</h3>
@@ -302,6 +311,46 @@ export default function Dashboard() {
                     </tbody>
                 </table>
             </div>
+            {/* Form Edit Wilayah */}
+            {isEditingWilayah && (
+                <div className="mt-4">
+                    <h3 className="text-lg font-bold">Edit Wilayah</h3>
+                    <input
+                        type="text"
+                        value={editedWilayahName}
+                        onChange={(e) => setEditedWilayahName(e.target.value)}
+                        placeholder="Nama Wilayah"
+                        className="p-2 border rounded"
+                    />
+                    <button
+                        onClick={handleSaveEditWilayah}
+                        className="ml-2 bg-blue-500 text-white px-4 py-2 rounded"
+                    >
+                        Simpan
+                    </button>
+                </div>
+            )}
+
+            {/* Form Edit Pangan */}
+            {isEditingPangan && (
+                <div className="mt-4">
+                    <h3 className="text-lg font-bold">Edit Pangan</h3>
+                    <input
+                        type="text"
+                        value={editedPanganName}
+                        onChange={(e) => setEditedPanganName(e.target.value)}
+                        placeholder="Nama Pangan"
+                        className="p-2 border rounded"
+                    />
+                    <button
+                        onClick={handleSaveEditPangan}
+                        className="ml-2 bg-blue-500 text-white px-4 py-2 rounded"
+                    >
+                        Simpan
+                    </button>
+                </div>
+            )}
+
         </div>
     );
 }

@@ -53,7 +53,7 @@ export default function Dashboard() {
                     <DaftarPetani />
                 </div>
             </div>
-            <Menu />
+            {/* <Menu /> */}
             <h2 className="text-2xl font-bold text-gray-800 mt-12 mb-4">List Artikel</h2>
             <table className="min-w-full bg-white border border-gray-300 rounded-lg shadow-md overflow-hidden">
             <thead className="bg-blue-500 text-white">
